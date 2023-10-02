@@ -3,4 +3,5 @@
 ## Author
 Sarun Manpraphan 66070309\
 Chanokchon Pancome 66070247\
-Kittiphot Mongkolrat 66070239
+Kittiphot Mongkolrat 66070239\
+Suphanut Ngamgetsook 66070195
