@@ -26,10 +26,20 @@ def draw_menu():
 
     screen.blit(surface, (0, 0))
 
+def draw_screen():
+    pygame.draw.rect(screen, 'black', [0, HEIGHT - 100, WIDTH, 100], 0) #UNDER (32, 42, 68)
+    pygame.draw.rect(screen, 'black', [0, 0, WIDTH, 40], 0)
+    pygame.draw.line(screen, 'white', (1200, 43), (0, 43), 5) #UNDER TOP
+    pygame.draw.line(screen, 'white', (255, HEIGHT - 100), (255, HEIGHT), 2) #SEP UNDER LEFT
+    pygame.draw.line(screen, 'white', (720, HEIGHT - 100), (720, HEIGHT), 2) #SEP UNDER RIGHT
+    pygame.draw.line(screen, 'white', (0, HEIGHT - 100), (WIDTH, HEIGHT - 100), 5) #TOP UNDER
+    pygame.draw.rect(screen, 'black', [0, 0, WIDTH, HEIGHT], 3)
+
 run = True
 while run:
     screen.fill('cornsilk4') # change soon to picture
     timer.tick(tickrate)
+    draw_screen()
     draw_menu()
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # exit game
