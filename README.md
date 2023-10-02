@@ -2,3 +2,4 @@
 
 ## Author
 Sarun Manpraphan 66070309
+Chanokchon Pancome 66070247
