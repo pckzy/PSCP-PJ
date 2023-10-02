@@ -10,6 +10,9 @@ surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
 tickrate = 50
 timer = pygame.time.Clock()
 
+header_font = pygame.font.Font('resources/fonts/Square.ttf', 50)
+name_font = pygame.font.Font('resources/fonts/Square.ttf', 31)
+
 def draw_menu():
     """main menu tabs"""
     surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
