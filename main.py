@@ -4,9 +4,10 @@ import pygame
 
 pygame.init()
 
-WIDTH, HEIGHT = 1200, 1010
+WIDTH, HEIGHT = 1200, 800 # 800notebook , 1010pc
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+pygame.display.set_caption('Survive from typing')
 tickrate = 50
 timer = pygame.time.Clock()
 
