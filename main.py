@@ -10,10 +10,18 @@ surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
 pygame.display.set_caption('Survive from typing')
 tickrate = 50
 timer = pygame.time.Clock()
-background = pygame.image.load("resources/images/projectbg.png")
 
+# game resources
+background = pygame.image.load("resources/images/projectbg.png")
 header_font = pygame.font.Font('resources/fonts/Square.ttf', 50)
 name_font = pygame.font.Font('resources/fonts/Square.ttf', 31)
+banner_font = pygame.font.Font('resources/fonts/1up.ttf', 28)
+
+# game variable
+score = 0
+high_score = 0 # use file.open soon
+total_type = 0
+lives = 5 # default = 5
 
 def draw_menu():
     """main menu tabs"""
@@ -29,6 +37,7 @@ def draw_menu():
     screen.blit(surface, (0, 0))
 
 def draw_screen():
+    # screen border
     pygame.draw.rect(screen, 'black', [0, HEIGHT - 100, WIDTH, 100], 0) #UNDER (32, 42, 68)
     pygame.draw.rect(screen, 'black', [0, 0, WIDTH, 40], 0)
     pygame.draw.line(screen, 'white', (1200, 42), (0, 42), 5) #UNDER TOP
@@ -36,6 +45,12 @@ def draw_screen():
     pygame.draw.line(screen, 'white', (720, HEIGHT - 100), (720, HEIGHT), 2) #SEP UNDER RIGHT
     pygame.draw.line(screen, 'white', (0, HEIGHT - 100), (WIDTH, HEIGHT - 100), 5) #TOP UNDER
     pygame.draw.rect(screen, 'black', [0, 0, WIDTH, HEIGHT], 3)
+
+    # screen text
+    screen.blit(banner_font.render(f'SCORE: {score}', True, 'white'), (240, 1))
+    screen.blit(banner_font.render(f'BEST: {high_score}', True, 'white'), (550, 1))
+    screen.blit(banner_font.render(f'TOTAL WORD: {total_type}', True, 'white'), (835, 1))
+    screen.blit(banner_font.render(f'LIVES: {lives}', True, 'white'), (12, 1))
 
 run = True
 while run:
