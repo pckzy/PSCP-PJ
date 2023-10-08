@@ -24,9 +24,25 @@ score = 0
 high_score = 0 # use file.open soon
 total_type = 0
 lives = 5 # default = 5
-level = 0
+level = 1
 active_string = ""
 paused = True
+
+# game sound
+pygame.mixer.init()
+pygame.mixer.music.load('resources/sounds/music.mp3')
+click = pygame.mixer.Sound('resources/sounds/click.mp3')
+woosh = pygame.mixer.Sound('resources/sounds/Swoosh.mp3')
+wrong = pygame.mixer.Sound('resources/sounds/Instrument Strum.mp3')
+lose = pygame.mixer.Sound('resources/sounds/hurt.mp3')
+lose_fx = pygame.mixer.Sound('resources/sounds/lose_fx.wav')
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
+click.set_volume(0.3)
+woosh.set_volume(0.1)
+wrong.set_volume(0.3)
+lose.set_volume(0.3)
+lose_fx.set_volume(0.3)
 
 class Button:
     def __init__(self, x_pos, y_pos, text, clicked, surf):
