@@ -1,6 +1,6 @@
 """PROJECT PSCP"""
 # use pygame to create
-import pygame
+import pygame, music
 
 pygame.init()
 
@@ -27,6 +27,7 @@ lives = 5 # default = 5
 level = 1
 active_string = ""
 paused = True
+music_paused = False
 
 # game sound
 pygame.mixer.init()
@@ -36,6 +37,8 @@ woosh = pygame.mixer.Sound('resources/sounds/Swoosh.mp3')
 wrong = pygame.mixer.Sound('resources/sounds/Instrument Strum.mp3')
 lose = pygame.mixer.Sound('resources/sounds/hurt.mp3')
 lose_fx = pygame.mixer.Sound('resources/sounds/lose_fx.wav')
+music_img = pygame.image.load('resources/images/music_logo.png').convert_alpha()
+song_btn = music.btn(565, 150, music_img, 0.4)
 pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(-1)
 click.set_volume(0.3)
@@ -70,6 +73,11 @@ def draw_menu():
     # LEFT SIDE
     pygame.draw.rect(surface, (0, 0, 0, 50), [70, 70, 600, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [70, 70, 600, 590], 5, 5)
+    song_btn.draw(surface)
+    if not music_paused:
+        pygame.draw.circle(surface, 'green', (605, 192), 40, 5)
+    else:
+        pygame.draw.circle(surface, 'white', (605, 191), 40, 3)
     surface.blit(header_font.render('MENU :', True, 'black'), (95, 90))
     btn_resume = Button(125, 190, '>', False, surface)
     surface.blit(header_font.render('PLAY!', True, 'white'), (175, 165))
