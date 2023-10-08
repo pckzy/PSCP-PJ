@@ -38,6 +38,7 @@ wrong = pygame.mixer.Sound('resources/sounds/Instrument Strum.mp3')
 lose = pygame.mixer.Sound('resources/sounds/hurt.mp3')
 lose_fx = pygame.mixer.Sound('resources/sounds/lose_fx.wav')
 music_img = pygame.image.load('resources/images/music_logo.png').convert_alpha()
+music_button = pygame.Rect(569, 155, 74, 72)
 song_btn = music.btn(565, 150, music_img, 0.4)
 pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(-1)
@@ -132,6 +133,13 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # exit game
             run = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if music_button.collidepoint(event.pos):
+                music_paused = not music_paused
+                if music_paused:
+                    pygame.mixer.music.pause()
+                else:
+                    pygame.mixer.music.unpause()
     if stop_btn:
         paused = True
     pygame.display.flip()
