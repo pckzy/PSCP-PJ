@@ -13,15 +13,18 @@ timer = pygame.time.Clock()
 
 # game resources
 background = pygame.image.load("resources/images/projectbg.png")
-header_font = pygame.font.Font('resources/fonts/Square.ttf', 50)
-name_font = pygame.font.Font('resources/fonts/Square.ttf', 31)
-banner_font = pygame.font.Font('resources/fonts/1up.ttf', 28)
+header_font = pygame.font.Font("resources/fonts/Square.ttf", 50)
+name_font = pygame.font.Font("resources/fonts/Square.ttf", 31)
+banner_font = pygame.font.Font("resources/fonts/1up.ttf", 28)
+mc_font = pygame.font.Font("resources/fonts/Minecrafter.Reg.ttf", 40)
 
 # game variable
 score = 0
 high_score = 0 # use file.open soon
 total_type = 0
 lives = 5 # default = 5
+level = 1
+active_string = ""
 
 def draw_menu():
     """main menu tabs"""
@@ -51,6 +54,9 @@ def draw_screen():
     screen.blit(banner_font.render(f'BEST: {high_score}', True, 'white'), (550, 1))
     screen.blit(banner_font.render(f'TOTAL WORD: {total_type}', True, 'white'), (835, 1))
     screen.blit(banner_font.render(f'LIVES: {lives}', True, 'white'), (12, 1))
+    screen.blit(mc_font.render(f'Level: {level}', True, 'white'), (15, HEIGHT - 67))
+    screen.blit(header_font.render(f'"{active_string}"', True, 'white'), (280, HEIGHT - 75))
+    screen.blit(mc_font.render(f'PSCP-PROJECT', True, 'white'), (845, HEIGHT - 67))
 
 run = True
 while run:
