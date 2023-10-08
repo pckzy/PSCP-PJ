@@ -24,7 +24,7 @@ score = 0
 high_score = 0 # use file.open soon
 total_type = 0
 lives = 5 # default = 5
-level = 1
+level = 0
 active_string = ""
 paused = True
 
