@@ -26,8 +26,11 @@ total_type = 0
 lives = 5 # default = 5
 level = 1
 active_string = ""
+submit = ""
 paused = True
 music_paused = False
+letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+            'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 # game sound
 pygame.mixer.init()
@@ -78,7 +81,7 @@ def draw_menu():
     if not music_paused:
         pygame.draw.circle(surface, 'green', (605, 192), 40, 5)
     else:
-        pygame.draw.circle(surface, 'white', (605, 191), 40, 3)
+        pygame.draw.circle(surface, 'red', (605, 191), 40, 3)
     surface.blit(header_font.render('MENU :', True, 'black'), (95, 90))
     btn_resume = Button(125, 190, '>', False, surface)
     surface.blit(header_font.render('PLAY!', True, 'white'), (175, 165))
@@ -140,6 +143,25 @@ while run:
                     pygame.mixer.music.pause()
                 else:
                     pygame.mixer.music.unpause()
+        if event.type == pygame.KEYDOWN:
+            if not paused:
+                if event.unicode.lower() in letters:
+                    active_string += event.unicode.lower()
+                    click.play()
+                if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                    active_string = ""
+                    click.play()
+                if event.key == pygame.K_BACKSPACE and len(active_string) > 0: #DEL INPUT TEXT
+                    active_string = active_string[:-1]
+                    click.play()
+                if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+                    submit = active_string
+                    active_string = ''
+            if event.key == pygame.K_ESCAPE:
+                if paused:
+                    paused = False
+                else:
+                    paused = True
     if stop_btn:
         paused = True
     pygame.display.flip()
