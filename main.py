@@ -4,6 +4,18 @@ import pygame, music, copy, random
 
 pygame.init()
 
+from nltk.corpus import words
+wordlist = words.words()
+len_indexes = []
+lenght = 1
+
+wordlist.sort(key=len)
+for i in range(len(wordlist)):
+    if len(wordlist[i]) > lenght:
+        lenght += 1
+        len_indexes.append(i)
+len_indexes.append(len(wordlist))
+
 WIDTH, HEIGHT = 1200, 800 # 800notebook , 1010pc
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
@@ -59,18 +71,6 @@ read = file.readline()
 high_score = int(read[:])
 total_type = 0
 file.close()
-
-from nltk.corpus import words
-wordlist = words.words()
-len_indexes = []
-lenght = 1
-
-wordlist.sort(key=len)
-for i in range(len(wordlist)):
-    if len(wordlist[i]) > lenght:
-        lenght += 1
-        len_indexes.append(i)
-len_indexes.append(len(wordlist))
 
 class Word:
     def __init__(self, text, speed, x_pos, y_pos):
