@@ -1,6 +1,6 @@
 """PROJECT PSCP"""
 # use pygame to create
-import pygame, music, copy
+import pygame, music, copy, random
 
 pygame.init()
 
@@ -18,6 +18,7 @@ name_font = pygame.font.Font("resources/fonts/Square.ttf", 31)
 banner_font = pygame.font.Font("resources/fonts/1up.ttf", 28)
 mc_font = pygame.font.Font("resources/fonts/Minecrafter.Reg.ttf", 40)
 pause_font = pygame.font.Font('resources/fonts/1up.ttf', 38)
+game_font = pygame.font.Font('resources/fonts/JoeJack.ttf', 33)
 
 # game variable
 score = 0
@@ -30,8 +31,9 @@ paused = True
 music_paused = False
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
             'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-lenght_select = [False, True, False, False, False, False, False]
+lenght_select = [True, False, False, False, False, False, False]
 new_lvl = True
+word_objects = []
 
 # game sound
 pygame.mixer.init()
@@ -57,6 +59,37 @@ read = file.readline()
 high_score = int(read[:])
 total_type = 0
 file.close()
+
+from nltk.corpus import words
+wordlist = words.words()
+len_indexes = []
+lenght = 1
+
+wordlist.sort(key=len)
+for i in range(len(wordlist)):
+    if len(wordlist[i]) > lenght:
+        lenght += 1
+        len_indexes.append(i)
+len_indexes.append(len(wordlist))
+
+class Word:
+    def __init__(self, text, speed, x_pos, y_pos):
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.text = text
+        self.speed = speed
+    
+    def draw(self): # game string green if correct
+        color = ('black')
+        screen.blit(game_font.render(self.text, True, color), (self.x_pos, self.y_pos))
+        act_len = len(active_string)
+        if active_string == self.text[:act_len]:
+            screen.blit(game_font.render(active_string, True, 'green'), (self.x_pos, self.y_pos))
+
+    def update(self):
+        x_speed = random.randint(-2, 2)
+        self.y_pos += self.speed
+        self.x_pos += x_speed
 
 class Button:
     def __init__(self, x_pos, y_pos, text, clicked, surf):
@@ -158,9 +191,25 @@ def check_highscore():
         file.write(str(int(high_score)))
         file.close()
 
-def generat_level():
+def generate_level():
+    word_object = []
+    include = []
+    vertical_spacing = (HEIGHT - 150) // level
     if True not in lenght_select: # if all false = unplayable
         lenght_select[0] = True
+    for i in range(len(lenght_select)):
+        if lenght_select[i]:
+            include.append((len_indexes[i], len_indexes[i+1]))
+    for i in range(level):
+        speed = random.randint(1, 3)
+        y_pos = random.randint(-265, -5)
+        x_pos = random.randint(10 + (i * vertical_spacing), (i+1) * vertical_spacing)
+        index_selection = random.choice(include) # random text
+        index = random.randint(index_selection[0], index_selection[1])
+        text = wordlist[index].lower()
+        new_word = Word(text, speed, x_pos, y_pos)
+        word_object.append(new_word)
+    return word_object
 
 run = True
 while run:
@@ -168,7 +217,17 @@ while run:
     timer.tick(tickrate)
     stop_btn = draw_screen()
     if new_lvl and not paused:
-        generat_level()
+        word_objects = generate_level()
+        new_lvl = False
+    else:
+        for words in word_objects:
+            words.draw()
+            if not paused:
+                words.update()
+            if words.y_pos > 700: # y pos that text gone
+                word_objects.remove(words)
+                lose.play()
+                lives -= 1
     if paused == True:
         draw_menu()
         resume_btn, quit_btn, select = draw_menu()
@@ -176,6 +235,10 @@ while run:
             paused = False
         if quit_btn:
             run = False
+    if len(word_objects) <= 0 and not paused:
+        level += 1
+        lives += 1
+        new_lvl = True
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # exit game
             run = False
