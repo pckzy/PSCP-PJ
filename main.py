@@ -31,6 +31,7 @@ music_paused = False
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
             'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 lenght_select = [False, True, False, False, False, False, False]
+new_lvl = True
 
 # game sound
 pygame.mixer.init()
@@ -157,11 +158,17 @@ def check_highscore():
         file.write(str(int(high_score)))
         file.close()
 
+def generat_level():
+    if True not in lenght_select: # if all false = unplayable
+        lenght_select[0] = True
+
 run = True
 while run:
     screen.blit(background, (0, 0))
     timer.tick(tickrate)
     stop_btn = draw_screen()
+    if new_lvl and not paused:
+        generat_level()
     if paused == True:
         draw_menu()
         resume_btn, quit_btn, select = draw_menu()
