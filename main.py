@@ -21,7 +21,6 @@ pause_font = pygame.font.Font('resources/fonts/1up.ttf', 38)
 
 # game variable
 score = 0
-high_score = 0 # use file.open soon
 total_type = 0
 lives = 5 # default = 5
 level = 1
@@ -50,6 +49,12 @@ woosh.set_volume(0.1)
 wrong.set_volume(0.3)
 lose.set_volume(0.3)
 lose_fx.set_volume(0.3)
+
+file = open('high_score.txt', 'r')
+read = file.readline()
+high_score = int(read[:])
+total_type = 0
+file.close()
 
 class Button:
     def __init__(self, x_pos, y_pos, text, clicked, surf):
@@ -129,6 +134,14 @@ def draw_screen():
     pause_btn.draw()
     return pause_btn.clicked
 
+def check_highscore():
+    global high_score
+    if score > high_score:
+        high_score = score
+        file = open('high_score.txt', 'w')
+        file.write(str(int(high_score)))
+        file.close()
+
 run = True
 while run:
     screen.blit(background, (0, 0))
@@ -172,5 +185,7 @@ while run:
                     paused = True
     if stop_btn:
         paused = True
+    if score > high_score:
+        check_highscore()
     pygame.display.flip()
 pygame.quit()
