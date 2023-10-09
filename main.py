@@ -23,8 +23,8 @@ game_font = pygame.font.Font('resources/fonts/JoeJack.ttf', 33)
 # game variable
 score = 0
 total_type = 0
-lives = 5 # default = 5
-level = 1
+lives = 4 # default = 5
+level = 0
 active_string = ""
 submit = ""
 paused = True
