@@ -254,7 +254,8 @@ while run:
                 if event.unicode.lower() in letters:
                     active_string += event.unicode.lower()
                     click.play()
-                if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_CTRL \
+                    or event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_SHIFT:
                     active_string = ""
                     click.play()
                 if event.key == pygame.K_BACKSPACE and len(active_string) > 0: #DEL INPUT TEXT
