@@ -1,6 +1,6 @@
 """PROJECT PSCP"""
 # use pygame to create
-import pygame, music
+import pygame, music, copy
 
 pygame.init()
 
@@ -30,6 +30,7 @@ paused = True
 music_paused = False
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
             'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+lenght_select = [False, True, False, False, False, False, False]
 
 # game sound
 pygame.mixer.init()
@@ -73,7 +74,7 @@ class Button:
                 self.clicked = True
             else: # HOLD BUT NOT CLICK
                 pygame.draw.circle(self.surf, (121, 120, 120), (self.x_pos, self.y_pos), 35) # hold
-        pygame.draw.circle(self.surf, 'white', (self.x_pos, self.y_pos), 35, 3)
+        pygame.draw.circle(self.surf, 'white', (self.x_pos, self.y_pos), 35, 3) # circle border
         self.surf.blit(pause_font.render(self.text, True, 'white'), (self.x_pos - 15, self.y_pos - 25))
 
 def draw_menu():
@@ -95,6 +96,20 @@ def draw_menu():
     btn_resume.draw()
     btn_quit.draw()
 
+    # GAME LENGHT
+    surface.blit(header_font.render('Active Letter Lengths:', True, 'black'), (95, 240))
+    len_pick = copy.deepcopy(lenght_select)
+    for i in range(len(lenght_select)):
+        word_len = Button(125 + (i*80), 340, str(i+2), False, surface)
+        word_len.draw()
+        if word_len.clicked:
+            if len_pick[i]:
+                len_pick[i] = False
+            else:
+                len_pick[i] = True
+        if lenght_select[i]:
+            pygame.draw.circle(surface, 'green', (125 + (i*80), 340), 35, 5)
+
     # TEXT
     surface.blit(header_font.render('CREDIT :', True, 'black'), (95, 390))
     surface.blit(name_font.render('66070309 : SARUN MANPRAPHAN', True, 'white'), (95, 450))
@@ -108,7 +123,7 @@ def draw_menu():
     pygame.draw.rect(surface, (0, 0, 0, 200), [720, 70, 400, 590], 5, 5)
 
     screen.blit(surface, (0, 0))
-    return btn_resume.clicked, btn_quit.clicked
+    return btn_resume.clicked, btn_quit.clicked, len_pick
 
 def draw_screen():
     # screen border
@@ -149,7 +164,7 @@ while run:
     stop_btn = draw_screen()
     if paused == True:
         draw_menu()
-        resume_btn, quit_btn = draw_menu()
+        resume_btn, quit_btn, select = draw_menu()
         if resume_btn:
             paused = False
         if quit_btn:
@@ -183,6 +198,9 @@ while run:
                     paused = False
                 else:
                     paused = True
+        if event.type == pygame.MOUSEBUTTONUP and paused:
+            if event.button == 1:
+                lenght_select = select
     if stop_btn:
         paused = True
     if score > high_score:
