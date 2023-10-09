@@ -90,6 +90,14 @@ def draw_menu():
     btn_resume.draw()
     btn_quit.draw()
 
+    # TEXT
+    surface.blit(header_font.render('CREDIT :', True, 'black'), (95, 390))
+    surface.blit(name_font.render('66070309 : SARUN MANPRAPHAN', True, 'white'), (95, 450))
+    surface.blit(name_font.render('66070195  : SUPHANUT NGAMGETSOOK', True, 'white'), (95, 490))
+    surface.blit(name_font.render('66070183  : Wathasin Huaihongtong', True, 'white'), (95, 530))
+    surface.blit(name_font.render('66070247 : Chanokchon Pancome', True, 'white'), (95, 570))
+    surface.blit(name_font.render('66070239 : Kittiphot Mongkolrat', True, 'white'), (95, 610))
+
     # RIGHT SIDE
     pygame.draw.rect(surface, (0, 0, 0, 50), [720, 70, 400, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [720, 70, 400, 590], 5, 5)
