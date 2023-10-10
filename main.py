@@ -35,7 +35,7 @@ game_font = pygame.font.Font('resources/fonts/JoeJack.ttf', 33)
 # game variable
 score = 0
 total_type = 0
-lives = 4 # default = 5
+lives = 1 # default = 5
 level = 0
 active_string = ""
 submit = ""
@@ -211,6 +211,15 @@ def generate_level():
         word_object.append(new_word)
     return word_object
 
+def check_score(point):
+    for word in word_objects:
+        if word.text == submit:
+            int_point = word.speed * len(word.text) * 7 * (len(word.text) / 3)
+            point += int(int_point)
+            word_objects.remove(word)
+            woosh.play()
+    return point
+
 run = True
 while run:
     screen.blit(background, (0, 0))
@@ -239,6 +248,15 @@ while run:
         level += 1
         lives += 1
         new_lvl = True
+    if submit != '':
+        init = score
+        score = check_score(score)
+        submit = ''
+        if init == score:
+            wrong.play()
+            pass
+        else:
+            total_type += 1
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # exit game
             run = False
