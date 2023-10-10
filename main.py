@@ -122,6 +122,7 @@ def draw_menu():
         pygame.draw.circle(surface, 'green', (605, 192), 40, 5)
     else:
         pygame.draw.circle(surface, 'red', (605, 191), 40, 3)
+        pygame.draw.line(surface, 'red', (579, 220), (627, 161), 4)
     surface.blit(header_font.render('MENU :', True, 'black'), (95, 90))
     btn_resume = Button(125, 190, '>', False, surface)
     surface.blit(header_font.render('PLAY!', True, 'white'), (175, 165))
@@ -224,7 +225,9 @@ run = True
 while run:
     screen.blit(background, (0, 0))
     timer.tick(tickrate)
-    stop_btn = draw_screen()
+    x, y = pygame.mouse.get_pos()
+    print(x, y)
+
     if new_lvl and not paused:
         word_objects = generate_level()
         new_lvl = False
@@ -290,6 +293,7 @@ while run:
         if event.type == pygame.MOUSEBUTTONUP and paused:
             if event.button == 1:
                 lenght_select = select
+    stop_btn = draw_screen()
     if stop_btn:
         paused = True
     if score > high_score:
