@@ -225,9 +225,8 @@ run = True
 while run:
     screen.blit(background, (0, 0))
     timer.tick(tickrate)
-    x, y = pygame.mouse.get_pos()
-    print(x, y)
-
+    # x, y = pygame.mouse.get_pos()
+    # print(x, y)
     if new_lvl and not paused:
         word_objects = generate_level()
         new_lvl = False
