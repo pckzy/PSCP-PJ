@@ -32,6 +32,10 @@ banner_font = pygame.font.Font("resources/fonts/1up.ttf", 28)
 mc_font = pygame.font.Font("resources/fonts/Minecrafter.Reg.ttf", 40)
 pause_font = pygame.font.Font('resources/fonts/1up.ttf', 38)
 game_font = pygame.font.Font('resources/fonts/JoeJack.ttf', 33)
+on_img = pygame.image.load('resources/images/on.png').convert_alpha()
+off_img = pygame.image.load('resources/images/off.png').convert_alpha()
+addlife_img = pygame.image.load('resources/images/plus.png').convert_alpha()
+minuslife_img = pygame.image.load('resources/images/minus.png').convert_alpha()
 
 # game variable
 score = 0
@@ -49,7 +53,7 @@ new_lvl = True
 word_objects = []
 scroll_offset = 0
 item_height = 40
-visible_items = 17
+visible_items = 15
 cheat = False
 
 # game sound
@@ -71,6 +75,16 @@ wrong.set_volume(0.3)
 lose.set_volume(0.3)
 lose_fx.set_volume(0.3)
 cheat_button = pygame.Rect(1020, 410, 400, 65)
+on_logo = music.btn(1237, 722, on_img, 0.4)
+off_logo = music.btn(1237, 722, off_img, 0.4)
+addlife_btn = music.btn(1020, 280, addlife_img, 0.4)
+addlvl_btn = music.btn(1020, 220, addlife_img, 0.4)
+add_box = pygame.Rect(1020, 280, 45, 45)
+minuslife_btn = music.btn(770, 280, minuslife_img, 0.4)
+minuslvl_btn = music.btn(770, 220, minuslife_img, 0.4)
+minus_box = pygame.Rect(770, 280, 45, 45)
+addlvl_box = pygame.Rect(1020, 220, 45, 45)
+minuslvl_box = pygame.Rect(770, 220, 45, 45)
 
 file = open('high_score.txt', 'r')
 read = file.readline()
@@ -175,6 +189,9 @@ def draw_menu():
     pygame.draw.rect(surface, (0, 0, 0, 50), [720, 70, 400, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [720, 70, 400, 590], 5, 5)
 
+    surface.blit(header_font.render('CHEAT :', True, 'black'), (740, 155))
+    surface.blit(name_font.render('Add level', True, str_color), (843, 230))
+    surface.blit(name_font.render('Add life', True, str_color), (855, 290))
     surface.blit(header_font.render('GAME HELPER :', True, 'black'), (740, 347))
     surface.blit(name_font.render('SHOW WORD LIST :', True, str_color), (740, 425))
     btn_word = Button(1055, 440, 'Y', False, surface)
@@ -187,6 +204,10 @@ def draw_menu():
     surface.blit(header_font.render('COLOR SETTING :', True, 'black'), (740, 490))
     surface.blit(name_font.render('TEXT COLOR :', True, str_color), (740, 560))
     surface.blit(name_font.render('TABS COLOR :', True, str_color), (740, 610))
+    addlife_btn.draw(surface)
+    minuslife_btn.draw(surface)
+    addlvl_btn.draw(surface)
+    minuslvl_btn.draw(surface)
 
     screen.blit(surface, (0, 0))
     return btn_resume.clicked, btn_quit.clicked, len_pick
@@ -260,7 +281,9 @@ def game_helper():
     pygame.draw.rect(screen, menu_color, [1200, 0, 1400, 800], 0)
     pygame.draw.line(screen, menu_color_diff, (1200, 0), (1200, 796), 5)
     pygame.draw.line(screen, menu_color_diff, (1200, 70), (1400, 70), 5)
+    pygame.draw.line(screen, menu_color_diff, (1200, 700), (1400, 700), 5)
     screen.blit(header_font.render('word', True, str_color), (1240, 10))
+    on_logo.draw(screen)
     if len(list_ofword) >= 1:
         start_item = max(0, len(list_ofword) - visible_items - scroll_offset)
         end_item = min(len(list_ofword) - scroll_offset, len(list_ofword))
@@ -335,6 +358,15 @@ while run:
             color_2 = color_active_2 if active_2 else color_inactive_2
             if cheat_button.collidepoint(event.pos):
                 cheat = not cheat
+                woosh.play()
+            if add_box.collidepoint(event.pos):
+                lives += 1
+            if minus_box.collidepoint(event.pos):
+                lives -= 1
+            if addlvl_box.collidepoint(event.pos):
+                level += 1
+            if minuslvl_box.collidepoint(event.pos):
+                level -= 1
         if event.type == pygame.KEYDOWN:
             if not paused:
                 if event.unicode.lower() in letters:
@@ -352,6 +384,7 @@ while run:
                     active_string = ''
                 if event.key == pygame.K_SLASH:
                     cheat = not cheat
+                    woosh.play()
             if event.key == pygame.K_ESCAPE:
                 if paused:
                     paused = False
@@ -404,6 +437,10 @@ while run:
         game_helper()
     else:
         pygame.draw.rect(screen, menu_color, [1203, 0, 1400, 800], 0)
-        pygame.draw.line(screen, menu_color_diff, (1200, 40), (1200, 796), 5)
+        screen.blit(header_font.render('word', True, str_color), (1240, 10))
+        pygame.draw.line(screen, menu_color_diff, (1200, 70), (1400, 70), 5)
+        pygame.draw.line(screen, menu_color_diff, (1200, 0), (1200, 796), 5)
+        pygame.draw.line(screen, menu_color_diff, (1200, 700), (1400, 700), 5)
+        off_logo.draw(screen)
     pygame.display.flip()
 pygame.quit()
