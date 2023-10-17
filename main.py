@@ -266,7 +266,7 @@ def game_helper():
         end_item = min(len(list_ofword) - scroll_offset, len(list_ofword))
         for i, item in enumerate(list_ofword[start_item:end_item]):
             item_text = name_font.render(item, True, str_color)
-            screen.blit(item_text, (1220, 90 + i * item_height))
+            screen.blit(item_text, (1298 - len(str(item))*9, 90 + i * item_height))
 
 run = True
 while run:
