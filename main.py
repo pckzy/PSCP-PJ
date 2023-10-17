@@ -297,5 +297,14 @@ while run:
         paused = True
     if score > high_score:
         check_highscore()
+    if lives <= 0:
+        paused = True
+        lose_fx.play()
+        level = 0
+        lives = 4
+        word_objects = []
+        new_level = True
+        check_highscore()
+        score = 0
     pygame.display.flip()
 pygame.quit()
