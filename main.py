@@ -72,6 +72,15 @@ high_score = int(read[:])
 total_type = 0
 file.close()
 
+menuclr_box = pygame.Rect(945, 605, 400, 40)
+txtclr_box = pygame.Rect(945, 555, 400, 40)
+txt_color, txt_color_2 = "", ""
+color_inactive, color_active = pygame.Color('black'), pygame.Color('grey')
+color_inactive_2, color_active_2 = pygame.Color('black'), pygame.Color('grey')
+menu_color, menu_color_diff, str_color = pygame.Color('black'), pygame.Color('white'), pygame.Color('white')
+color, color_2 = color_inactive, color_inactive
+active, active_2 = False, False
+
 class Word:
     def __init__(self, text, speed, x_pos, y_pos):
         self.x_pos = x_pos
@@ -157,27 +166,31 @@ def draw_menu():
     pygame.draw.rect(surface, (0, 0, 0, 50), [720, 70, 400, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [720, 70, 400, 590], 5, 5)
 
+    surface.blit(header_font.render('COLOR SETTING :', True, 'black'), (740, 490))
+    surface.blit(name_font.render('TEXT COLOR :', True, 'white'), (740, 560))
+    surface.blit(name_font.render('TABS COLOR :', True, 'white'), (740, 610))
+
     screen.blit(surface, (0, 0))
     return btn_resume.clicked, btn_quit.clicked, len_pick
 
 def draw_screen():
     # screen border
-    pygame.draw.rect(screen, 'black', [0, HEIGHT - 100, WIDTH, 100], 0) #UNDER (32, 42, 68)
-    pygame.draw.rect(screen, 'black', [0, 0, WIDTH, 40], 0)
-    pygame.draw.line(screen, 'white', (1200, 42), (0, 42), 5) #UNDER TOP
-    pygame.draw.line(screen, 'white', (255, HEIGHT - 100), (255, HEIGHT), 2) #SEP UNDER LEFT
-    pygame.draw.line(screen, 'white', (720, HEIGHT - 100), (720, HEIGHT), 2) #SEP UNDER RIGHT
-    pygame.draw.line(screen, 'white', (0, HEIGHT - 100), (WIDTH, HEIGHT - 100), 5) #TOP UNDER
-    pygame.draw.rect(screen, 'black', [0, 0, WIDTH, HEIGHT], 3)
+    pygame.draw.rect(screen, menu_color, [0, HEIGHT - 100, WIDTH, 100], 0) #UNDER (32, 42, 68)
+    pygame.draw.rect(screen, menu_color, [0, 0, WIDTH, 40], 0)
+    pygame.draw.line(screen, menu_color_diff, (1200, 42), (0, 42), 5) #UNDER TOP
+    pygame.draw.line(screen, menu_color_diff, (255, HEIGHT - 100), (255, HEIGHT), 5) #SEP UNDER LEFT
+    pygame.draw.line(screen, menu_color_diff, (720, HEIGHT - 100), (720, HEIGHT), 5) #SEP UNDER RIGHT
+    pygame.draw.line(screen, menu_color_diff, (0, HEIGHT - 100), (WIDTH, HEIGHT - 100), 5) #TOP UNDER
+    pygame.draw.rect(screen, menu_color, [0, 0, WIDTH, HEIGHT], 3)
 
     # screen text
-    screen.blit(banner_font.render(f'SCORE: {score}', True, 'white'), (240, 1))
-    screen.blit(banner_font.render(f'BEST: {high_score}', True, 'white'), (550, 1))
-    screen.blit(banner_font.render(f'TOTAL WORD: {total_type}', True, 'white'), (835, 1))
-    screen.blit(banner_font.render(f'LIVES: {lives}', True, 'white'), (12, 1))
-    screen.blit(mc_font.render(f'Level: {level}', True, 'white'), (15, HEIGHT - 67))
-    screen.blit(header_font.render(f'"{active_string}"', True, 'white'), (280, HEIGHT - 75))
-    screen.blit(mc_font.render(f'PSCP-PROJECT', True, 'white'), (845, HEIGHT - 67))
+    screen.blit(banner_font.render(f'SCORE: {score}', True, str_color), (240, 1))
+    screen.blit(banner_font.render(f'BEST: {high_score}', True, str_color), (550, 1))
+    screen.blit(banner_font.render(f'TOTAL WORD: {total_type}', True, str_color), (835, 1))
+    screen.blit(banner_font.render(f'LIVES: {lives}', True, str_color), (12, 1))
+    screen.blit(mc_font.render(f'Level: {level}', True, str_color), (15, HEIGHT - 67))
+    screen.blit(header_font.render(f'"{active_string}"', True, str_color), (280, HEIGHT - 75))
+    screen.blit(mc_font.render(f'PSCP-PROJECT', True, str_color), (845, HEIGHT - 67))
 
     # button
     pause_btn = Button(778, HEIGHT - 52, 'II', False, screen)
@@ -242,6 +255,13 @@ while run:
     if paused == True:
         draw_menu()
         resume_btn, quit_btn, select = draw_menu()
+        txt_surface, txt_surface_2 = name_font.render(txt_color, True, 'black'), name_font.render(txt_color_2, True, 'black')
+        width, width_2 = max(155, txt_surface.get_width() + 10), max(155, txt_surface_2.get_width() + 10)
+        menuclr_box.w, txtclr_box.w = width, width_2
+        screen.blit(txt_surface, (menuclr_box.x + 5, menuclr_box.y + 5))
+        screen.blit(txt_surface_2, (txtclr_box.x + 5, txtclr_box.y + 5))
+        pygame.draw.rect(screen, color, menuclr_box, 4, 4)
+        pygame.draw.rect(screen, color_2, txtclr_box, 4, 4)
         if resume_btn:
             paused = False
         if quit_btn:
@@ -269,6 +289,16 @@ while run:
                     pygame.mixer.music.pause()
                 else:
                     pygame.mixer.music.unpause()
+            if menuclr_box.collidepoint(event.pos):
+                active = not active
+            else:
+                active = False
+            if txtclr_box.collidepoint(event.pos):
+                active_2 = not active_2
+            else:
+                active_2 = False
+            color = color_active if active else color_inactive
+            color_2 = color_active_2 if active_2 else color_inactive_2
         if event.type == pygame.KEYDOWN:
             if not paused:
                 if event.unicode.lower() in letters:
@@ -289,6 +319,32 @@ while run:
                     paused = False
                 else:
                     paused = True
+            if active and paused:
+                if event.key == pygame.K_RETURN:
+                    try:
+                        if txt_color == 'white':
+                            menu_color_diff = pygame.Color('black')
+                        elif txt_color == 'black':
+                            menu_color_diff = pygame.Color('white')
+                        menu_color = pygame.Color(txt_color)
+                    except ValueError:
+                        wrong.play()
+                    txt_color = ""
+                elif event.key == pygame.K_BACKSPACE:
+                    txt_color = txt_color[:-1]
+                else:
+                    txt_color += event.unicode
+            if active_2 and paused:
+                if event.key == pygame.K_RETURN:
+                    try:
+                        str_color = pygame.Color(txt_color_2)
+                    except ValueError:
+                        wrong.play()
+                    txt_color_2 = ""
+                elif event.key == pygame.K_BACKSPACE:
+                    txt_color_2 = txt_color_2[:-1]
+                else:
+                    txt_color_2 += event.unicode
         if event.type == pygame.MOUSEBUTTONUP and paused:
             if event.button == 1:
                 lenght_select = select
