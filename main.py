@@ -7,6 +7,7 @@ pygame.init()
 from nltk.corpus import words
 wordlist = words.words()
 len_indexes = []
+list_ofword = []
 lenght = 1
 
 wordlist.sort(key=len)
@@ -16,7 +17,7 @@ for i in range(len(wordlist)):
         len_indexes.append(i)
 len_indexes.append(len(wordlist))
 
-WIDTH, HEIGHT = 1200, 800 # 800notebook , 1010pc
+WIDTH, HEIGHT = 1400, 800 # 800notebook , 1010pc
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
 pygame.display.set_caption('Survive from typing')
@@ -46,6 +47,10 @@ letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
 lenght_select = [True, False, False, False, False, False, False]
 new_lvl = True
 word_objects = []
+scroll_offset = 0
+item_height = 40
+visible_items = 17
+cheat = False
 
 # game sound
 pygame.mixer.init()
@@ -65,6 +70,7 @@ woosh.set_volume(0.1)
 wrong.set_volume(0.3)
 lose.set_volume(0.3)
 lose_fx.set_volume(0.3)
+cheat_button = pygame.Rect(1020, 410, 400, 65)
 
 file = open('high_score.txt', 'r')
 read = file.readline()
@@ -169,6 +175,15 @@ def draw_menu():
     pygame.draw.rect(surface, (0, 0, 0, 50), [720, 70, 400, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [720, 70, 400, 590], 5, 5)
 
+    surface.blit(header_font.render('GAME HELPER :', True, 'black'), (740, 347))
+    surface.blit(name_font.render('SHOW WORD LIST :', True, 'white'), (740, 425))
+    btn_word = Button(1055, 440, 'Y', False, surface)
+    btn_word.draw()
+    if cheat:
+        pygame.draw.circle(surface, 'green', (1055, 440), 37, 5)
+    else:
+        pygame.draw.circle(surface, 'red', (1055, 440), 37, 5)
+        pygame.draw.line(surface, 'red', (1034, 467), (1075, 413), 5)
     surface.blit(header_font.render('COLOR SETTING :', True, 'black'), (740, 490))
     surface.blit(name_font.render('TEXT COLOR :', True, 'white'), (740, 560))
     surface.blit(name_font.render('TABS COLOR :', True, 'white'), (740, 610))
@@ -211,6 +226,7 @@ def check_highscore():
 def generate_level():
     word_object = []
     include = []
+    item_list = []
     vertical_spacing = (HEIGHT - 150) // level
     if True not in lenght_select: # if all false = unplayable
         lenght_select[0] = True
@@ -226,7 +242,8 @@ def generate_level():
         text = wordlist[index].lower()
         new_word = Word(text, speed, x_pos, y_pos)
         word_object.append(new_word)
-    return word_object
+        item_list.append(text)
+    return word_object, item_list
 
 def check_score(point):
     for word in word_objects:
@@ -237,6 +254,20 @@ def check_score(point):
             woosh.play()
     return point
 
+def game_helper():
+    if submit in list_ofword:
+        list_ofword.remove(submit)
+    pygame.draw.rect(screen, menu_color, [1200, 0, 1400, 800], 0)
+    pygame.draw.line(screen, menu_color_diff, (1200, 0), (1200, 796), 5)
+    pygame.draw.line(screen, menu_color_diff, (1200, 70), (1400, 70), 5)
+    screen.blit(header_font.render('word', True, str_color), (1240, 10))
+    if len(list_ofword) >= 1:
+        start_item = max(0, len(list_ofword) - visible_items - scroll_offset)
+        end_item = min(len(list_ofword) - scroll_offset, len(list_ofword))
+        for i, item in enumerate(list_ofword[start_item:end_item]):
+            item_text = name_font.render(item, True, str_color)
+            screen.blit(item_text, (1220, 90 + i * item_height))
+
 run = True
 while run:
     screen.blit(background, (0, 0))
@@ -244,7 +275,7 @@ while run:
     # x, y = pygame.mouse.get_pos()
     # print(x, y)
     if new_lvl and not paused:
-        word_objects = generate_level()
+        word_objects, list_ofword = generate_level()
         new_lvl = False
     else:
         for words in word_objects:
@@ -302,6 +333,8 @@ while run:
                 active_2 = False
             color = color_active if active else color_inactive
             color_2 = color_active_2 if active_2 else color_inactive_2
+            if cheat_button.collidepoint(event.pos):
+                cheat = not cheat
         if event.type == pygame.KEYDOWN:
             if not paused:
                 if event.unicode.lower() in letters:
@@ -365,5 +398,10 @@ while run:
         new_level = True
         check_highscore()
         score = 0
+    if cheat:
+        game_helper()
+    else:
+        pygame.draw.rect(screen, menu_color, [1203, 0, 1400, 800], 0)
+        pygame.draw.line(screen, menu_color_diff, (1200, 40), (1200, 796), 5)
     pygame.display.flip()
 pygame.quit()
