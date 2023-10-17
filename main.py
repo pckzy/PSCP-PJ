@@ -140,9 +140,9 @@ def draw_menu():
         pygame.draw.line(surface, 'red', (579, 220), (627, 161), 4)
     surface.blit(header_font.render('MENU :', True, 'black'), (95, 90))
     btn_resume = Button(125, 190, '>', False, surface)
-    surface.blit(header_font.render('PLAY!', True, 'white'), (175, 165))
+    surface.blit(header_font.render('PLAY!', True, str_color), (175, 165))
     btn_quit = Button(375, 190, 'X', False, surface)
-    surface.blit(header_font.render('QUIT!', True, 'white'), (425, 165))
+    surface.blit(header_font.render('QUIT!', True, str_color), (425, 165))
     btn_resume.draw()
     btn_quit.draw()
 
@@ -165,18 +165,18 @@ def draw_menu():
 
     # TEXT
     surface.blit(header_font.render('CREDIT :', True, 'black'), (95, 390))
-    surface.blit(name_font.render('66070309 : SARUN MANPRAPHAN', True, 'white'), (95, 450))
-    surface.blit(name_font.render('66070195  : SUPHANUT NGAMGETSOOK', True, 'white'), (95, 490))
-    surface.blit(name_font.render('66070183  : Wathasin Huaihongtong', True, 'white'), (95, 530))
-    surface.blit(name_font.render('66070247 : Chanokchon Pancome', True, 'white'), (95, 570))
-    surface.blit(name_font.render('66070239 : Kittiphot Mongkolrat', True, 'white'), (95, 610))
+    surface.blit(name_font.render('66070309 : SARUN MANPRAPHAN', True, str_color), (95, 450))
+    surface.blit(name_font.render('66070195  : SUPHANUT NGAMGETSOOK', True, str_color), (95, 490))
+    surface.blit(name_font.render('66070183  : Wathasin Huaihongtong', True, str_color), (95, 530))
+    surface.blit(name_font.render('66070247 : Chanokchon Pancome', True, str_color), (95, 570))
+    surface.blit(name_font.render('66070239 : Kittiphot Mongkolrat', True, str_color), (95, 610))
 
     # RIGHT SIDE
     pygame.draw.rect(surface, (0, 0, 0, 50), [720, 70, 400, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [720, 70, 400, 590], 5, 5)
 
     surface.blit(header_font.render('GAME HELPER :', True, 'black'), (740, 347))
-    surface.blit(name_font.render('SHOW WORD LIST :', True, 'white'), (740, 425))
+    surface.blit(name_font.render('SHOW WORD LIST :', True, str_color), (740, 425))
     btn_word = Button(1055, 440, 'Y', False, surface)
     btn_word.draw()
     if cheat:
@@ -185,8 +185,8 @@ def draw_menu():
         pygame.draw.circle(surface, 'red', (1055, 440), 37, 5)
         pygame.draw.line(surface, 'red', (1034, 467), (1075, 413), 5)
     surface.blit(header_font.render('COLOR SETTING :', True, 'black'), (740, 490))
-    surface.blit(name_font.render('TEXT COLOR :', True, 'white'), (740, 560))
-    surface.blit(name_font.render('TABS COLOR :', True, 'white'), (740, 610))
+    surface.blit(name_font.render('TEXT COLOR :', True, str_color), (740, 560))
+    surface.blit(name_font.render('TABS COLOR :', True, str_color), (740, 610))
 
     screen.blit(surface, (0, 0))
     return btn_resume.clicked, btn_quit.clicked, len_pick
@@ -350,6 +350,8 @@ while run:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
                     submit = active_string
                     active_string = ''
+                if event.key == pygame.K_SLASH:
+                    cheat = not cheat
             if event.key == pygame.K_ESCAPE:
                 if paused:
                     paused = False
