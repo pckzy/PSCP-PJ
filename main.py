@@ -85,6 +85,7 @@ minuslvl_btn = music.btn(770, 220, minuslife_img, 0.4)
 minus_box = pygame.Rect(770, 280, 45, 45)
 addlvl_box = pygame.Rect(1020, 220, 45, 45)
 minuslvl_box = pygame.Rect(770, 220, 45, 45)
+clear_box = pygame.Rect(770, 150, 300, 55)
 
 file = open('high_score.txt', 'r')
 read = file.readline()
@@ -189,7 +190,7 @@ def draw_menu():
     pygame.draw.rect(surface, (0, 0, 0, 50), [720, 70, 400, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [720, 70, 400, 590], 5, 5)
 
-    surface.blit(header_font.render('CHEAT :', True, 'black'), (740, 155))
+    surface.blit(header_font.render('CHEAT :', True, 'black'), (740, 90))
     surface.blit(name_font.render('Add level', True, str_color), (843, 230))
     surface.blit(name_font.render('Add life', True, str_color), (855, 290))
     surface.blit(header_font.render('GAME HELPER :', True, 'black'), (740, 347))
@@ -208,6 +209,8 @@ def draw_menu():
     minuslife_btn.draw(surface)
     addlvl_btn.draw(surface)
     minuslvl_btn.draw(surface)
+    pygame.draw.rect(surface, 'black', (770, 150, 300, 55), 0, 5)
+    surface.blit(header_font.render('CLEAR WORD', True, str_color), (782, 153))
 
     screen.blit(surface, (0, 0))
     return btn_resume.clicked, btn_quit.clicked, len_pick
@@ -367,6 +370,8 @@ while run:
                 level += 1
             if minuslvl_box.collidepoint(event.pos):
                 level -= 1
+            if clear_box.collidepoint(event.pos):
+                word_objects.clear()
         if event.type == pygame.KEYDOWN:
             if not paused:
                 if event.unicode.lower() in letters:
