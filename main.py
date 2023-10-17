@@ -153,6 +153,9 @@ def draw_menu():
                 len_pick[i] = True
         if lenght_select[i]:
             pygame.draw.circle(surface, 'green', (125 + (i*80), 340), 35, 5)
+        else:
+            pygame.draw.circle(surface, 'red', (125 + (i*80), 340), 35, 5)
+            pygame.draw.line(surface, 'red', (103 + (i*80), 364), (143 + (i*80), 314), 5)
 
     # TEXT
     surface.blit(header_font.render('CREDIT :', True, 'black'), (95, 390))
