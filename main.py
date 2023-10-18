@@ -387,9 +387,9 @@ while run:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
                     submit = active_string
                     active_string = ''
-                if event.key == pygame.K_SLASH:
-                    cheat = not cheat
-                    woosh.play()
+            if event.key == pygame.K_SLASH:
+                cheat = not cheat
+                woosh.play()
             if event.key == pygame.K_ESCAPE:
                 if paused:
                     paused = False
