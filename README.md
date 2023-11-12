@@ -14,4 +14,7 @@ To use this project, you'll need to install the necessary libraries. You can do 
 
 ```bash
 pip install pygame
+```
+```bash
 pip install nltk
+```
