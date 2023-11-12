@@ -1,14 +1,91 @@
-"""PROJECT PSCP"""
-# use pygame to create
-import pygame, music, copy, random
+#----------------- PROJECT PSCP -----------------#
+import pygame
+import random
+import copy
+import setimage
+from nltk.corpus import words
 
 pygame.init()
 
-from nltk.corpus import words
-wordlist = words.words()
+#----------------- RESOLUTION -----------------#
+WIDTH = 1400
+HEIGHT = 800
+screen = pygame.display.set_mode([WIDTH, HEIGHT])
+surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+pygame.display.set_caption('Survive from typing')
+timer = pygame.time.Clock()
+tickrate = 50
+
+#----------------- FONT RESOURCE -----------------#
+header_font = pygame.font.Font("resources/fonts/Square.ttf", 50)
+name_font = pygame.font.Font("resources/fonts/Square.ttf", 31)
+banner_font = pygame.font.Font("resources/fonts/1up.ttf", 28)
+mc_font = pygame.font.Font("resources/fonts/Minecrafter.Reg.ttf", 40)
+pause_font = pygame.font.Font('resources/fonts/1up.ttf', 38)
+game_font = pygame.font.Font('resources/fonts/JoeJack.ttf', 33)
+
+#----------------- IMAGE RESOURCE -----------------#
+background = pygame.image.load("resources/images/projectbg.png")
+on_img = pygame.image.load('resources/images/on.png').convert_alpha()
+off_img = pygame.image.load('resources/images/off.png').convert_alpha()
+addlife_img = pygame.image.load('resources/images/plus.png').convert_alpha()
+minuslife_img = pygame.image.load('resources/images/minus.png').convert_alpha()
+music_img = pygame.image.load('resources/images/music_logo.png').convert_alpha()
+
+#----------------- SOUND RESOURCE -----------------#
+pygame.mixer.init()
+pygame.mixer.music.load('resources/sounds/music.mp3')
+click = pygame.mixer.Sound('resources/sounds/click.mp3')
+woosh = pygame.mixer.Sound('resources/sounds/Swoosh.mp3')
+wrong = pygame.mixer.Sound('resources/sounds/Instrument Strum.mp3')
+lose = pygame.mixer.Sound('resources/sounds/hurt.mp3')
+lose_fx = pygame.mixer.Sound('resources/sounds/lose_fx.wav')
+
+#----------------- SET SOUND VOLUME -----------------#
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
+click.set_volume(0.3)
+woosh.set_volume(0.1)
+wrong.set_volume(0.3)
+lose.set_volume(0.3)
+lose_fx.set_volume(0.3)
+
+#----------------- SET COLOR -----------------#
+color_inactive = pygame.Color('black')
+color_inactive_2 = pygame.Color('black')
+color_active = pygame.Color('grey')
+color_active_2 = pygame.Color('grey')
+menu_color = pygame.Color('black')
+menu_color_diff = pygame.Color('white')
+str_color =  pygame.Color('white')
+
+#----------------- GAME VARIABLE -----------------#
+letters = [chr(i) for i in range(97, 123)]
+lenght_select = [True, False, False, False, False, False, False]
+word_objects = []
 len_indexes = []
 list_ofword = []
+active_string = ""
+submit = ""
+txt_color, txt_color_2 = "", ""
+score = 0
+total_type = 0
+lives = 4
+level = 0
+scroll_offset = 0
+item_height = 40
+visible_items = 15
 lenght = 1
+paused = True
+new_lvl = True
+music_paused = False
+cheat = False
+active = False
+active_2 = False
+color, color_2 = color_inactive, color_inactive
+
+#----------------- GET WORD FROM NLTK -----------------#
+wordlist = words.words()
 
 wordlist.sort(key=len)
 for i in range(len(wordlist)):
@@ -17,97 +94,38 @@ for i in range(len(wordlist)):
         len_indexes.append(i)
 len_indexes.append(len(wordlist))
 
-WIDTH, HEIGHT = 1400, 800 # 800notebook , 1010pc
-screen = pygame.display.set_mode([WIDTH, HEIGHT])
-surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-pygame.display.set_caption('Survive from typing')
-tickrate = 50
-timer = pygame.time.Clock()
-
-# game resources
-background = pygame.image.load("resources/images/projectbg.png")
-header_font = pygame.font.Font("resources/fonts/Square.ttf", 50)
-name_font = pygame.font.Font("resources/fonts/Square.ttf", 31)
-banner_font = pygame.font.Font("resources/fonts/1up.ttf", 28)
-mc_font = pygame.font.Font("resources/fonts/Minecrafter.Reg.ttf", 40)
-pause_font = pygame.font.Font('resources/fonts/1up.ttf', 38)
-game_font = pygame.font.Font('resources/fonts/JoeJack.ttf', 33)
-on_img = pygame.image.load('resources/images/on.png').convert_alpha()
-off_img = pygame.image.load('resources/images/off.png').convert_alpha()
-addlife_img = pygame.image.load('resources/images/plus.png').convert_alpha()
-minuslife_img = pygame.image.load('resources/images/minus.png').convert_alpha()
-
-# game variable
-score = 0
-total_type = 0
-lives = 4 # default = 5
-level = 0
-active_string = ""
-submit = ""
-paused = True
-music_paused = False
-letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-            'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-lenght_select = [True, False, False, False, False, False, False]
-new_lvl = True
-word_objects = []
-scroll_offset = 0
-item_height = 40
-visible_items = 15
-cheat = False
-
-# game sound
-pygame.mixer.init()
-pygame.mixer.music.load('resources/sounds/music.mp3')
-click = pygame.mixer.Sound('resources/sounds/click.mp3')
-woosh = pygame.mixer.Sound('resources/sounds/Swoosh.mp3')
-wrong = pygame.mixer.Sound('resources/sounds/Instrument Strum.mp3')
-lose = pygame.mixer.Sound('resources/sounds/hurt.mp3')
-lose_fx = pygame.mixer.Sound('resources/sounds/lose_fx.wav')
-music_img = pygame.image.load('resources/images/music_logo.png').convert_alpha()
+#----------------- GAME BUTTON -----------------#
+song_btn = setimage.btn(565, 150, music_img, 0.4)
+on_logo = setimage.btn(1237, 722, on_img, 0.4)
+off_logo = setimage.btn(1237, 722, off_img, 0.4)
+addlife_btn = setimage.btn(1020, 280, addlife_img, 0.4)
+addlvl_btn = setimage.btn(1020, 220, addlife_img, 0.4)
+minuslife_btn = setimage.btn(770, 280, minuslife_img, 0.4)
+minuslvl_btn = setimage.btn(770, 220, minuslife_img, 0.4)
 music_button = pygame.Rect(569, 155, 74, 72)
-song_btn = music.btn(565, 150, music_img, 0.4)
-pygame.mixer.music.set_volume(0.1)
-pygame.mixer.music.play(-1)
-click.set_volume(0.3)
-woosh.set_volume(0.1)
-wrong.set_volume(0.3)
-lose.set_volume(0.3)
-lose_fx.set_volume(0.3)
 cheat_button = pygame.Rect(1020, 410, 400, 65)
-on_logo = music.btn(1237, 722, on_img, 0.4)
-off_logo = music.btn(1237, 722, off_img, 0.4)
-addlife_btn = music.btn(1020, 280, addlife_img, 0.4)
-addlvl_btn = music.btn(1020, 220, addlife_img, 0.4)
 add_box = pygame.Rect(1020, 280, 45, 45)
-minuslife_btn = music.btn(770, 280, minuslife_img, 0.4)
-minuslvl_btn = music.btn(770, 220, minuslife_img, 0.4)
 minus_box = pygame.Rect(770, 280, 45, 45)
 addlvl_box = pygame.Rect(1020, 220, 45, 45)
 minuslvl_box = pygame.Rect(770, 220, 45, 45)
 clear_box = pygame.Rect(770, 150, 300, 55)
+menuclr_box = pygame.Rect(945, 605, 400, 40)
+txtclr_box = pygame.Rect(945, 555, 400, 40)
 
+#----------------- READ HIGHSCORE.TXT -----------------#
 file = open('high_score.txt', 'r')
 read = file.readline()
 high_score = int(read[:])
 total_type = 0
 file.close()
 
-menuclr_box = pygame.Rect(945, 605, 400, 40)
-txtclr_box = pygame.Rect(945, 555, 400, 40)
-txt_color, txt_color_2 = "", ""
-color_inactive, color_active = pygame.Color('black'), pygame.Color('grey')
-color_inactive_2, color_active_2 = pygame.Color('black'), pygame.Color('grey')
-menu_color, menu_color_diff, str_color = pygame.Color('black'), pygame.Color('white'), pygame.Color('white')
-color, color_2 = color_inactive, color_inactive
-active, active_2 = False, False
-
+#----------------- ALL CLASS SETTING -----------------#
 class Word:
     def __init__(self, text, speed, x_pos, y_pos):
-        self.x_pos = x_pos
-        self.y_pos = y_pos
         self.text = text
         self.speed = speed
+        self.x_pos = x_pos
+        self.y_pos = y_pos
     
     def draw(self): # game string green if correct
         color = ('black')
@@ -141,10 +159,11 @@ class Button:
         pygame.draw.circle(self.surf, 'white', (self.x_pos, self.y_pos), 35, 3) # circle border
         self.surf.blit(pause_font.render(self.text, True, 'white'), (self.x_pos - 15, self.y_pos - 25))
 
+#----------------- define function -----------------#
 def draw_menu():
-    """main menu tabs"""
+    """draw main menu tabs"""
     surface = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-    # LEFT SIDE
+    #----------------- menu left side -----------------#
     pygame.draw.rect(surface, (0, 0, 0, 50), [70, 70, 600, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [70, 70, 600, 590], 5, 5)
     song_btn.draw(surface)
@@ -161,7 +180,7 @@ def draw_menu():
     btn_resume.draw()
     btn_quit.draw()
 
-    # GAME LENGHT
+    #----------------- select game lenght -----------------#
     surface.blit(header_font.render('Active Letter Lengths:', True, 'black'), (95, 240))
     len_pick = copy.deepcopy(lenght_select)
     for i in range(len(lenght_select)):
@@ -178,7 +197,7 @@ def draw_menu():
             pygame.draw.circle(surface, 'red', (125 + (i*80), 340), 35, 5)
             pygame.draw.line(surface, 'red', (103 + (i*80), 364), (143 + (i*80), 314), 5)
 
-    # TEXT
+    #----------------- draw left side text -----------------#
     surface.blit(header_font.render('CREDIT :', True, 'black'), (95, 390))
     surface.blit(name_font.render('66070309 : SARUN MANPRAPHAN', True, str_color), (95, 450))
     surface.blit(name_font.render('66070195  : SUPHANUT NGAMGETSOOK', True, str_color), (95, 490))
@@ -186,7 +205,7 @@ def draw_menu():
     surface.blit(name_font.render('66070247 : Chanokchon Pancome', True, str_color), (95, 570))
     surface.blit(name_font.render('66070239 : Kittiphot Mongkolrat', True, str_color), (95, 610))
 
-    # RIGHT SIDE
+    #----------------- menu right side -----------------#
     pygame.draw.rect(surface, (0, 0, 0, 50), [720, 70, 400, 590], 0, 5)
     pygame.draw.rect(surface, (0, 0, 0, 200), [720, 70, 400, 590], 5, 5)
 
@@ -216,7 +235,7 @@ def draw_menu():
     return btn_resume.clicked, btn_quit.clicked, len_pick
 
 def draw_screen():
-    # screen border
+    #----------------- screen border -----------------#
     pygame.draw.rect(screen, menu_color, [0, HEIGHT - 100, WIDTH, 100], 0) #UNDER (32, 42, 68)
     pygame.draw.rect(screen, menu_color, [0, 0, WIDTH, 40], 0)
     pygame.draw.line(screen, menu_color_diff, (1200, 42), (0, 42), 5) #UNDER TOP
@@ -225,7 +244,7 @@ def draw_screen():
     pygame.draw.line(screen, menu_color_diff, (0, HEIGHT - 100), (WIDTH, HEIGHT - 100), 5) #TOP UNDER
     pygame.draw.rect(screen, menu_color, [0, 0, WIDTH, HEIGHT], 3)
 
-    # screen text
+    #----------------- screen text -----------------#
     screen.blit(banner_font.render(f'SCORE: {score}', True, str_color), (240, 1))
     screen.blit(banner_font.render(f'BEST: {high_score}', True, str_color), (550, 1))
     screen.blit(banner_font.render(f'TOTAL WORD: {total_type}', True, str_color), (835, 1))
@@ -234,12 +253,13 @@ def draw_screen():
     screen.blit(header_font.render(f'"{active_string}"', True, str_color), (280, HEIGHT - 75))
     screen.blit(mc_font.render(f'PSCP-PROJECT', True, str_color), (845, HEIGHT - 67))
 
-    # button
+    #----------------- button -----------------#
     pause_btn = Button(778, HEIGHT - 52, 'II', False, screen)
     pause_btn.draw()
     return pause_btn.clicked
 
 def check_highscore():
+    """check highscore function"""
     global high_score
     if score > high_score:
         high_score = score
@@ -248,12 +268,16 @@ def check_highscore():
         file.close()
 
 def generate_level():
+    """add random word into list"""
     word_object = []
     include = []
     item_list = []
     vertical_spacing = (HEIGHT - 150) // level
-    if True not in lenght_select: # if all false = unplayable
+
+    #----------------- case sensitive if all false = unplayable -----------------#
+    if True not in lenght_select:
         lenght_select[0] = True
+
     for i in range(len(lenght_select)):
         if lenght_select[i]:
             include.append((len_indexes[i], len_indexes[i+1]))
@@ -270,6 +294,7 @@ def generate_level():
     return word_object, item_list
 
 def check_score(point):
+    """call this function to check that you wrong/correct"""
     for word in word_objects:
         if word.text == submit:
             int_point = word.speed * len(word.text) * 7 * (len(word.text) / 3)
@@ -279,6 +304,7 @@ def check_score(point):
     return point
 
 def game_helper():
+    """this function show what inside the word list"""
     if submit in list_ofword:
         list_ofword.remove(submit)
     pygame.draw.rect(screen, menu_color, [1200, 0, 1400, 800], 0)
@@ -294,6 +320,7 @@ def game_helper():
             item_text = name_font.render(item, True, str_color)
             screen.blit(item_text, (1298 - len(str(item))*9, 90 + i * item_height))
 
+#----------------- main run -----------------#
 run = True
 while run:
     screen.blit(background, (0, 0))
@@ -312,6 +339,8 @@ while run:
                 word_objects.remove(words)
                 lose.play()
                 lives -= 1
+
+    #----------------- draw menu when paused -----------------#
     if paused == True:
         draw_menu()
         resume_btn, quit_btn, select = draw_menu()
@@ -322,14 +351,22 @@ while run:
         screen.blit(txt_surface_2, (txtclr_box.x + 5, txtclr_box.y + 5))
         pygame.draw.rect(screen, color, menuclr_box, 4, 4)
         pygame.draw.rect(screen, color_2, txtclr_box, 4, 4)
+
+        #----------------- press resume_btn to continue play -----------------#
         if resume_btn:
             paused = False
+
+        #----------------- exit game when press quit_btn button -----------------#
         if quit_btn:
             run = False
+
+    #----------------- generate new level when finish previous level -----------------#
     if len(word_objects) <= 0 and not paused:
         level += 1
         lives += 1
         new_lvl = True
+
+    #----------------- check if you correct/wrong -----------------#
     if submit != '':
         init = score
         score = check_score(score)
@@ -339,6 +376,8 @@ while run:
             pass
         else:
             total_type += 1
+
+    #----------------- game event -----------------#
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # exit game
             run = False
@@ -424,11 +463,17 @@ while run:
         if event.type == pygame.MOUSEBUTTONUP and paused:
             if event.button == 1:
                 lenght_select = select
+
+    #----------------- pause game -----------------#
     stop_btn = draw_screen()
     if stop_btn:
         paused = True
+
+    #----------------- check when score higher than highscore -----------------#
     if score > high_score:
         check_highscore()
+
+    #----------------- game over -----------------#
     if lives <= 0:
         paused = True
         lose_fx.play()
@@ -438,6 +483,8 @@ while run:
         new_level = True
         check_highscore()
         score = 0
+
+    #----------------- cheat menu -----------------#
     if cheat:
         game_helper()
     else:
@@ -447,5 +494,6 @@ while run:
         pygame.draw.line(screen, menu_color_diff, (1200, 0), (1200, 796), 5)
         pygame.draw.line(screen, menu_color_diff, (1200, 700), (1400, 700), 5)
         off_logo.draw(screen)
+
     pygame.display.flip()
 pygame.quit()
