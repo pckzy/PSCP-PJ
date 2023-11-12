@@ -21,5 +21,5 @@ pip install nltk
 Sarun Manpraphan 66070309\
 Chanokchon Pancome 66070247\
 Kittiphot Mongkolrat 66070239\
-Suphanut Ngamgetsook 66070195\
+Suphanut Ngamgetsook 66070195 (commit ไม่ขึ้นชื่อ)\
 Wathasin Huaihongtong 66070183
