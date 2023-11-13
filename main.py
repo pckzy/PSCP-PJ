@@ -272,7 +272,8 @@ def generate_level():
     word_object = []
     include = []
     item_list = []
-    vertical_spacing = (HEIGHT - 150) // level
+    vertical_spacing = (WIDTH - 415) // level
+    y_temp = random.randint(-150, -5)
 
     #----------------- case sensitive if all false = unplayable -----------------#
     if True not in lenght_select:
@@ -283,14 +284,15 @@ def generate_level():
             include.append((len_indexes[i], len_indexes[i+1]))
     for i in range(level):
         speed = random.randint(1, 3)
-        y_pos = random.randint(-265, -5)
-        x_pos = random.randint(10 + (i * vertical_spacing), (i+1) * vertical_spacing)
+        y_pos = y_temp - 35
+        x_pos = random.randint(27 + (i * vertical_spacing), (i+1) * vertical_spacing)
         index_selection = random.choice(include) # random text
         index = random.randint(index_selection[0], index_selection[1])
         text = wordlist[index].lower()
         new_word = Word(text, speed, x_pos, y_pos)
         word_object.append(new_word)
         item_list.append(text)
+        y_temp = y_pos
     return word_object, item_list
 
 def check_score(point):
