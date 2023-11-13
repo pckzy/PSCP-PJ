@@ -16,6 +16,10 @@ pip install nltk
 
 ![Project Demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcW41YzdtbDl2eXpha2xvd3o5Y3ZlMHBkcjhrb2owbXNyYXc2NjFzeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/32ODDvseRv8Hfr9P7J/giphy.gif)
 
+## How to play
+
+พิมพ์ตามคำที่ตกลงมาให้ทัน พิมพ์ถูกจะได้รับแต้ม ถ้าไม่ทันเลือดจะลดลงทีละหนึ่ง หากเลือดหมด --> Gameover
+
 ## Author
 
 Sarun Manpraphan 66070309\
