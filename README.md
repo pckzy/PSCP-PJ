@@ -1,7 +1,7 @@
 ## Team : 30BANK1000
 ## Project name : Survive from typing
 
-## Installation
+## 🌟 Installation
 
 To use this project, you'll need to install the necessary libraries. You can do this using pip:
 
@@ -25,7 +25,7 @@ pip install nltk
 กดปุ่ม Play! เพื่อเริ่มเกม  
 พิมพ์ตามคำที่ตกลงมาให้ทัน พิมพ์ถูกจะได้รับแต้ม ถ้าพิมพ์ไม่ทันเลือดจะลดลงทีละหนึ่ง หากเลือดหมด --> Gameover
 
-## Author
+## 🤝 Contributing
 
 Sarun Manpraphan 66070309\
 Chanokchon Pancome 66070247\
