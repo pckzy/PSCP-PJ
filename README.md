@@ -12,11 +12,14 @@ pip install pygame
 pip install nltk
 ```
 
-## Project Demo
+## :rocket: Project Demo
 
-![Project Demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWd0Y2h5c3Fwcnk2bWdzYnlyZ3Bpa2VrZTY2dnphZjFqamlqYXRvZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4v6ej8GCB5NAjj5njT/giphy.gif)
+- **Gameplay**   
+![Demo 1](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWd0Y2h5c3Fwcnk2bWdzYnlyZ3Bpa2VrZTY2dnphZjFqamlqYXRvZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4v6ej8GCB5NAjj5njT/giphy.gif)  
+- **Color changing**  
+![Demo 2](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExazI0N21uY3o5dXlvcXJqamcxamRsNnEyNHUxemM0ZDVjMXE3M3p5cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/sFDB7huPeUDJvo1g9b/giphy.gif)
 
-## How to play
+## :computer: How to play
 
 เลือกความยาวตัวอักษรของคำที่ต้องการเล่น สามารถเลือกได้หลายความยาว  
 กดปุ่ม Play! เพื่อเริ่มเกม  
