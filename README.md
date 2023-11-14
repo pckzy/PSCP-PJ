@@ -14,7 +14,7 @@ pip install nltk
 
 ## Project Demo
 
-![Project Demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcW41YzdtbDl2eXpha2xvd3o5Y3ZlMHBkcjhrb2owbXNyYXc2NjFzeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/32ODDvseRv8Hfr9P7J/giphy.gif)
+![Project Demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWd0Y2h5c3Fwcnk2bWdzYnlyZ3Bpa2VrZTY2dnphZjFqamlqYXRvZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4v6ej8GCB5NAjj5njT/giphy.gif)
 
 ## How to play
 
